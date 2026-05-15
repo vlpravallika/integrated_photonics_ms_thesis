@@ -1,0 +1,692 @@
+% ======================================================================
+% Paste this section into your existing document.
+% Required packages (add to your preamble if not already present):
+%   \usepackage{amsmath,amssymb}
+%   \usepackage{physics}        % for \dd
+%   \usepackage{siunitx}        % for SI units
+%   \usepackage{booktabs}       % for tables
+%   \usepackage{enumitem}       % for custom lists
+% ======================================================================
+
+\section{2D Gaussian Beam Coupling: SMF-28 Fibre to Side-Facing InGaAs Detector}
+
+% ----------------------------------------------------------------------
+\subsection{Problem Geometry}
+% ----------------------------------------------------------------------
+
+Consider a single-mode fibre (Corning SMF-28) with its cleaved end-face
+oriented so that the fibre axis is horizontal (the $+x$~direction).
+An InGaAs photodetector of length $d = \SI{1}{\milli\metre}$ is placed
+above the fibre tip with its active surface facing \emph{vertically
+downward} (the $-z$~direction).  The detector centre is located at
+horizontal distance~$x_c$ and vertical distance~$z_\mathrm{det}$ from
+the fibre tip.
+
+In this 2D analysis (cross-section in the $xz$-plane), the fibre emits
+a Gaussian beam into the forward half-space.  Only a small fraction of
+this light propagates at a steep enough angle to intercept the detector,
+and that fraction is further reduced by Fresnel reflections at two
+interfaces:
+%
+\begin{enumerate}[label=(\roman*)]
+  \item the fibre end-face (glass $\to$ air), and
+  \item the detector active surface (air $\to$ InGaAs).
+\end{enumerate}
+
+% ----------------------------------------------------------------------
+\subsection{Key Parameters}
+% ----------------------------------------------------------------------
+
+\begin{center}
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{Symbol} & \textbf{Description} & \textbf{Value} & \textbf{Unit} \\
+\midrule
+$\lambda$       & Free-space wavelength        & 1.550  & \si{\micro\metre} \\
+$w_0$           & Beam waist (MFD/2)           & 5.2    & \si{\micro\metre} \\
+$n_\text{core}$ & Fibre core index (@\SI{1550}{\nano\metre}) & 1.4682 & -- \\
+$n_\text{air}$  & Air refractive index         & 1.0    & -- \\
+$n_\text{det}$  & InGaAs detector index (@\SI{1550}{\nano\metre}) & 3.5 & -- \\
+$d$             & Detector length              & 1.0    & \si{\milli\metre} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent
+The mode-field diameter (MFD) of SMF-28 at \SI{1550}{\nano\metre} is
+approximately \SI{10.4}{\micro\metre}, giving a beam waist
+$w_0 = \text{MFD}/2 = \SI{5.2}{\micro\metre}$.
+
+% ----------------------------------------------------------------------
+\subsection{Gaussian Beam Divergence}
+% ----------------------------------------------------------------------
+
+\subsubsection{Divergence inside the fibre}
+
+A Gaussian beam with waist $w_0$ propagating in a medium of refractive
+index $n$ has a far-field $1/e^2$ half-angle divergence given by
+%
+\begin{equation}\label{eq:theta-fib}
+  \theta_\text{fib}
+  = \frac{\lambda}{\pi\, n_\text{core}\, w_0}.
+\end{equation}
+%
+Substituting the values:
+%
+\begin{equation}
+  \theta_\text{fib}
+  = \frac{1.550 \times 10^{-6}}
+         {\pi \times 1.4682 \times 5.2 \times 10^{-6}}
+  \approx 0.0646~\text{rad}
+  \approx 3.70^\circ.
+\end{equation}
+
+\subsubsection{Snell's refraction at the flat fibre end-face}
+\label{sec:snell}
+
+The fibre has a flat, cleaved end-face that acts as a planar dielectric
+interface between the fibre core (index $n_\text{core}$) and air
+(index $n_\text{air}$).  When a ray at angle $\theta_\text{fib}$
+(measured from the fibre axis, i.e.\ the surface normal of the end-face)
+exits the fibre, Snell's law governs the refracted angle:
+%
+\begin{equation}\label{eq:snell}
+  \boxed{%
+    n_\text{core}\,\sin\theta_\text{fib}
+    = n_\text{air}\,\sin\theta_0
+  }
+\end{equation}
+%
+Since $n_\text{core} > n_\text{air}$, the refracted angle $\theta_0$
+is \emph{larger} than $\theta_\text{fib}$: the beam fans out more
+in air than it did inside the glass.  Solving for $\theta_0$:
+%
+\begin{equation}\label{eq:theta0}
+  \theta_0
+  = \arcsin\!\left(\frac{n_\text{core}}{n_\text{air}}
+    \sin\theta_\text{fib}\right)
+  = \arcsin\!\bigl(1.4682 \times \sin 3.70^\circ\bigr)
+  \approx 5.44^\circ.
+\end{equation}
+
+\paragraph{Physical intuition.}
+Light travels slower in glass (higher index) than in air.  At the flat
+interface, the tangential component of the wavevector is conserved;
+consequently the ray bends \emph{away} from the surface normal when
+passing from a denser to a less dense medium.  The divergence
+half-angle increases from $3.70^\circ$ to $5.44^\circ$.
+
+% ----------------------------------------------------------------------
+\subsection{Gaussian Angular Intensity Profile}
+% ----------------------------------------------------------------------
+
+In the far field, the angular intensity distribution of the Gaussian
+beam (in air) is itself a Gaussian:
+%
+\begin{equation}\label{eq:gaussian}
+  \boxed{%
+    G(\theta) = \exp\!\left(-\frac{2\,\theta^2}{\theta_0^2}\right)
+  }
+\end{equation}
+%
+where $\theta$ is the angle of a given ray measured from the fibre axis,
+and $\theta_0$ is the $1/e^2$ divergence half-angle in air
+(Eq.~\ref{eq:theta0}).
+
+\paragraph{Why the factor of 2?}
+The electric \emph{field} amplitude falls as
+$E(\theta) \propto \exp(-\theta^2/\theta_0^2)$.
+Since intensity (power per unit angle in 2D) is proportional to
+$|E|^2$, the intensity profile acquires twice the exponent:
+$I \propto \exp(-2\theta^2/\theta_0^2)$.
+
+\paragraph{Key values of $G(\theta)$:}
+\begin{center}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Angle} & $G(\theta)$ & \textbf{Meaning} \\
+\midrule
+$\theta = 0$         & $1.000$        & On-axis (peak) \\
+$\theta = \theta_0$  & $e^{-2} \approx 0.135$ & $1/e^2$ point; 13.5\% of peak \\
+$\theta = 2\theta_0$ & $e^{-8} \approx 3.4\times10^{-4}$ & 0.03\% of peak \\
+$\theta = 3\theta_0$ & $e^{-18}\approx 1.5\times10^{-8}$ & Essentially zero \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent
+The Gaussian drops \emph{extremely} rapidly with angle.  Since the
+detector is placed off-axis (above the fibre), only rays in the tail of
+the Gaussian distribution reach it, which is the dominant reason that
+coupling is low in this side-fire geometry.
+
+% ----------------------------------------------------------------------
+\subsection{Fresnel Reflection and Transmission}
+% ----------------------------------------------------------------------
+
+At each dielectric interface, a fraction of the incident light is
+reflected and the remainder is transmitted.  The reflectance depends on
+the angle of incidence~$\theta_i$, the refractive indices $n_1$
+(incident medium) and $n_2$ (transmitted medium), and the polarisation.
+
+\subsubsection{Fresnel equations}
+
+Using Snell's law to obtain the transmitted angle,
+%
+\begin{equation}
+  \cos\theta_t = \sqrt{1 - \left(\frac{n_1}{n_2}\right)^2 \sin^2\theta_i},
+\end{equation}
+%
+the amplitude reflection coefficients for \textbf{s}-polarisation (TE)
+and \textbf{p}-polarisation (TM) are:
+%
+\begin{align}
+  r_s &= \frac{n_1\cos\theta_i - n_2\cos\theta_t}
+              {n_1\cos\theta_i + n_2\cos\theta_t},
+  \label{eq:rs} \\[6pt]
+  r_p &= \frac{n_2\cos\theta_i - n_1\cos\theta_t}
+              {n_2\cos\theta_i + n_1\cos\theta_t}.
+  \label{eq:rp}
+\end{align}
+
+\subsubsection{Power transmittance}
+
+For unpolarised light (a reasonable assumption for a single-mode fibre
+with no polarisation-maintaining structure), the average \textbf{power
+transmittance} is:
+%
+\begin{equation}\label{eq:fresnel-T}
+  \boxed{%
+    T(\theta_i;\, n_1, n_2)
+    = 1 - \frac{r_s^2 + r_p^2}{2}
+  }
+\end{equation}
+
+\paragraph{Note on total internal reflection.}
+When $n_1 > n_2$ (e.g.\ glass $\to$ air), if $\theta_i$ exceeds the
+critical angle $\theta_c = \arcsin(n_2/n_1)$, the term under the
+square root for $\cos\theta_t$ becomes negative, and \emph{all} light
+is reflected ($T = 0$).  For the fibre exit face,
+$\theta_c = \arcsin(1/1.4682) \approx 42.9^\circ$.  In practice, the
+Gaussian beam has negligible power beyond $\sim\!3\theta_0 \approx
+16^\circ$, so total internal reflection is not a concern.
+
+\subsubsection{Interface 1: Fibre exit face (glass $\to$ air)}
+
+At the fibre end-face, the incidence angle on the surface is $\theta$
+(the same angle measured from the fibre/surface normal).  Thus:
+%
+\begin{equation}\label{eq:T-fib}
+  T_\text{fib}(\theta) = T(\theta;\; n_\text{core},\; n_\text{air}).
+\end{equation}
+%
+At normal incidence ($\theta = 0$):
+%
+\begin{equation}
+  T_\text{fib}(0)
+  = 1 - \left(\frac{n_\text{core} - n_\text{air}}
+                    {n_\text{core} + n_\text{air}}\right)^{\!2}
+  = 1 - \left(\frac{1.4682 - 1}{1.4682 + 1}\right)^{\!2}
+  \approx 0.964.
+\end{equation}
+%
+This means ${\sim}3.6\%$ of the on-axis power is reflected back into
+the fibre at the exit face.
+
+\subsubsection{Interface 2: Detector surface (air $\to$ InGaAs)}
+
+The detector active surface is oriented vertically (facing downward,
+perpendicular to the fibre axis).  A ray travelling at angle $\theta$
+from the fibre axis strikes the detector surface at an incidence angle
+of:
+%
+\begin{equation}\label{eq:det-angle}
+  \theta_\text{inc,\,det} = \frac{\pi}{2} - \theta.
+\end{equation}
+%
+This is because the detector normal is horizontal (along $-x$), while
+the ray direction makes angle $\theta$ with the horizontal.
+Therefore:
+%
+\begin{equation}\label{eq:T-det}
+  T_\text{det}(\theta) = T\!\left(\frac{\pi}{2} - \theta;\;
+    n_\text{air},\; n_\text{det}\right).
+\end{equation}
+%
+\paragraph{Grazing incidence problem.}
+For small $\theta$ (rays close to the fibre axis),
+$\theta_\text{inc,\,det} \approx 90^\circ$, which is \emph{grazing
+incidence}.  Fresnel reflectance approaches 100\% at grazing angles
+for any dielectric interface.  Even at moderate angles, e.g.\
+$\theta = 10^\circ$ gives $\theta_\text{inc,\,det} = 80^\circ$,
+the transmittance is significantly reduced.
+
+At normal incidence on the detector ($\theta_\text{inc,\,det} = 0$):
+%
+\begin{equation}
+  T_\text{det}\big|_\text{normal}
+  = 1 - \left(\frac{n_\text{air} - n_\text{det}}
+                    {n_\text{air} + n_\text{det}}\right)^{\!2}
+  = 1 - \left(\frac{1 - 3.5}{1 + 3.5}\right)^{\!2}
+  \approx 0.691.
+\end{equation}
+%
+Even at normal incidence, ${\sim}30.9\%$ of the light is reflected due
+to the high refractive index of InGaAs.  At the typical incidence angles
+in this geometry (\SIrange{75}{88}{\degree}), the transmittance drops
+to roughly $40$--$60\%$.
+
+% ----------------------------------------------------------------------
+\subsection{Detector Geometry and Angular Limits}
+% ----------------------------------------------------------------------
+
+The detector of length $d$ is centred at horizontal position $x_c$
+and height $z_\text{det}$.  Its left and right edges are at:
+%
+\begin{equation}
+  x_L = x_c - \frac{d}{2}, \qquad x_R = x_c + \frac{d}{2}.
+\end{equation}
+
+From the fibre tip (the origin), the angle subtended by each edge is:
+%
+\begin{align}
+  \theta_\text{min} &= \arctan\!\left(\frac{z_\text{det}}{x_R}\right),
+  \label{eq:thmin} \\
+  \theta_\text{max} &= \arctan\!\left(\frac{z_\text{det}}{x_L}\right).
+  \label{eq:thmax}
+\end{align}
+%
+These are the minimum and maximum angles (from the fibre axis) at which
+a ray from the fibre tip can strike the detector.  The angular range
+$[\theta_\text{min},\, \theta_\text{max}]$ defines the integration
+limits for the coupling integral.
+
+\paragraph{Edge cases.}
+If $x_L \leq 0$ (detector extends behind the fibre tip), then
+$\theta_\text{max} = \pi/2$.  If $x_R \leq 0$, the detector is
+entirely behind the fibre and no forward-emitted light can reach it.
+
+% ----------------------------------------------------------------------
+\subsection{Coupling Integral}
+% ----------------------------------------------------------------------
+
+\subsubsection{Integrand}
+
+At each angle $\theta \in [\theta_\text{min},\,\theta_\text{max}]$,
+the differential contribution to the captured power includes three
+multiplicative factors:
+%
+\begin{enumerate}[label=\arabic*.]
+  \item \textbf{Gaussian intensity} $G(\theta)$: how much power the
+        fibre emits in direction $\theta$.
+  \item \textbf{Fresnel transmission at fibre exit} $T_\text{fib}(\theta)$:
+        fraction transmitted through the glass--air interface.
+  \item \textbf{Fresnel transmission at detector} $T_\text{det}(\theta)$:
+        fraction transmitted into the InGaAs at the angle of incidence
+        $\pi/2 - \theta$.
+\end{enumerate}
+%
+The integrand is therefore:
+%
+\begin{equation}\label{eq:integrand}
+  \boxed{%
+    f(\theta)
+    = G(\theta)\;\cdot\;T_\text{fib}(\theta)\;\cdot\;T_\text{det}(\theta)
+    = \exp\!\left(-\frac{2\theta^2}{\theta_0^2}\right)
+      \cdot T(\theta;\,n_\text{core},n_\text{air})
+      \cdot T\!\left(\tfrac{\pi}{2}-\theta;\,n_\text{air},n_\text{det}\right).
+  }
+\end{equation}
+
+\paragraph{Angle-dependent integration.}
+Crucially, the Fresnel transmittances are evaluated at \emph{every}
+angle $\theta$ within the integration range---not at a single
+representative angle.  This is important because both $T_\text{fib}$
+and $T_\text{det}$ vary significantly across the angular aperture of
+the detector.
+
+\subsubsection{Normalisation}
+
+The total power emitted by the fibre into the forward half-space
+(in 2D) is proportional to:
+%
+\begin{equation}\label{eq:Ptot}
+  P_\text{tot} = \int_{-\pi/2}^{+\pi/2}
+    G(\theta)\;\dd{\theta}
+  = \int_{-\pi/2}^{+\pi/2}
+    \exp\!\left(-\frac{2\theta^2}{\theta_0^2}\right)\dd{\theta}.
+\end{equation}
+%
+Note that $P_\text{tot}$ does \emph{not} include the Fresnel loss at
+the fibre exit.  This is because we define the coupling fraction
+relative to the power \emph{inside} the fibre (i.e.\ the input power).
+The Fresnel losses are accounted for in the numerator.
+
+\subsubsection{Captured power and coupling fraction}
+
+The power captured by the detector is:
+%
+\begin{equation}\label{eq:Pdet}
+  P_\text{det} = \int_{\theta_\text{min}}^{\theta_\text{max}}
+    f(\theta)\;\dd{\theta}
+  = \int_{\theta_\text{min}}^{\theta_\text{max}}
+    G(\theta)\;T_\text{fib}(\theta)\;T_\text{det}(\theta)\;\dd{\theta}.
+\end{equation}
+%
+The coupling fraction is:
+%
+\begin{equation}\label{eq:eta}
+  \boxed{%
+    \eta = \frac{P_\text{det}}{P_\text{tot}}
+         = \frac{\displaystyle
+           \int_{\theta_\text{min}}^{\theta_\text{max}}
+           G(\theta)\;T_\text{fib}(\theta)\;T_\text{det}(\theta)
+           \;\dd{\theta}}
+           {\displaystyle
+           \int_{-\pi/2}^{+\pi/2}
+           G(\theta)\;\dd{\theta}}
+  }
+\end{equation}
+%
+and the coupled power in \si{\decibel m} for an input of \SI{0}{\decibel m}
+is:
+%
+\begin{equation}\label{eq:dBm}
+  P\;[\si{\decibel m}] = 10\,\log_{10}(\eta).
+\end{equation}
+
+% ----------------------------------------------------------------------
+\subsection{Loss Mechanisms}
+% ----------------------------------------------------------------------
+
+The total coupling loss can be understood as a product of three
+independent loss factors, each of which reduces the captured power:
+
+\subsubsection{Gaussian beam falloff (dominant)}
+
+The fibre emits most of its power within a narrow cone of half-angle
+$\theta_0 \approx 5.4^\circ$ around the axis.  The detector, positioned
+above and to the side of the fibre, subtends angles typically in the
+range $3^\circ$--$15^\circ$.  At these angles, the Gaussian intensity
+$G(\theta) = \exp(-2\theta^2/\theta_0^2)$ is already very small:
+%
+\begin{itemize}
+  \item At $\theta = \theta_0$: $G = e^{-2} \approx 0.135$ (13.5\%
+        of peak).
+  \item At $\theta = 2\theta_0 \approx 10.9^\circ$:
+        $G = e^{-8} \approx 3.4 \times 10^{-4}$ (0.03\%).
+  \item At $\theta = 3\theta_0 \approx 16.3^\circ$:
+        $G = e^{-18} \approx 1.5 \times 10^{-8}$ (effectively zero).
+\end{itemize}
+%
+This exponential falloff is the \emph{primary} reason for low coupling
+in this geometry.  Moving the detector further from the axis (larger
+$\theta_\text{min}$) causes an exponential decrease in captured power.
+
+\subsubsection{Fresnel loss at fibre exit ($\sim$3.6\%)}
+
+At the glass-to-air interface, about 3.6\% of the power is reflected
+at normal incidence.  This loss increases slightly at larger angles but
+remains modest ($< 10\%$) for all angles where the Gaussian has
+significant power ($\theta < 3\theta_0$).  This is a relatively minor
+loss compared to the other two.
+
+\subsubsection{Fresnel loss at detector (significant)}
+
+The air-to-InGaAs interface has a large index mismatch
+($n_\text{air} = 1.0$ vs.\ $n_\text{det} = 3.5$), resulting in high
+reflectance even at normal incidence (${\sim}30.9\%$).  In this geometry,
+the situation is much worse: rays from the fibre strike the detector at
+near-grazing incidence ($\theta_\text{inc} = 75^\circ$--$88^\circ$),
+where Fresnel reflectance is even higher.  Typical transmittance in this
+angular range is only $40$--$60\%$, representing a loss of
+${\sim}2$--\SI{4}{\decibel}.
+
+The Brewster angle for this interface is:
+\begin{equation}
+  \theta_B = \arctan\!\left(\frac{n_\text{det}}{n_\text{air}}\right)
+  = \arctan(3.5)
+  \approx 74.1^\circ,
+\end{equation}
+at which $r_p = 0$ (no reflection for p-polarisation).  However, even
+at Brewster's angle, the s-polarisation still reflects strongly, so the
+unpolarised average transmittance remains well below unity.
+
+% ----------------------------------------------------------------------
+\subsection{Summary of the Calculation}
+% ----------------------------------------------------------------------
+
+The complete procedure for computing the coupled power fraction is:
+%
+\begin{enumerate}
+  \item \textbf{Compute divergence angles.}
+    Use Eq.~\eqref{eq:theta-fib} for $\theta_\text{fib}$ inside the
+    fibre, then Snell's law (Eq.~\ref{eq:snell}) to obtain
+    $\theta_0$ in air.
+
+  \item \textbf{Determine geometric angular limits.}
+    From the detector position $(x_c,\, z_\text{det})$ and length $d$,
+    compute $\theta_\text{min}$ and $\theta_\text{max}$ using
+    Eqs.~\eqref{eq:thmin}--\eqref{eq:thmax}.
+
+  \item \textbf{Evaluate the coupling integral.}
+    Numerically integrate Eq.~\eqref{eq:Pdet} over
+    $[\theta_\text{min},\, \theta_\text{max}]$, where the integrand
+    (Eq.~\ref{eq:integrand}) is the product of the Gaussian profile
+    and the two angle-dependent Fresnel transmittances.
+
+  \item \textbf{Normalise.}
+    Divide by the total forward-hemisphere Gaussian integral
+    (Eq.~\ref{eq:Ptot}) to obtain $\eta$.
+
+  \item \textbf{Convert to \si{\decibel m}.}
+    $P\;[\si{\decibel m}] = 10\log_{10}(\eta)$ for a \SI{0}{\decibel m}
+    input.
+\end{enumerate}
+
+% ----------------------------------------------------------------------
+\subsection{Numerical Results}
+% ----------------------------------------------------------------------
+
+Table~\ref{tab:results} presents the coupled power for selected detector
+positions.  The detector is a \SI{1}{\milli\metre} InGaAs detector
+centred at horizontal distance $x_c$ and height $z_\text{det}$ from the
+fibre tip.
+
+\begin{table}[h]
+\centering
+\caption{Coupled power to \SI{1}{\milli\metre} InGaAs detector
+  (\SI{0}{\decibel m} input, 2D model).}
+\label{tab:results}
+\begin{tabular}{@{}rrrl@{}}
+\toprule
+$z$ [\si{\micro\metre}] & $x_c$ [\si{\micro\metre}]
+  & Fraction & Power [\si{\decibel m}] \\
+\midrule
+100  & 1000 & $4.57\times10^{-19}$ & $-183.40$ \\
+100  & 2000 & $3.85\times10^{-6}$  & $-54.14$  \\
+100  & 3000 & $1.70\times10^{-3}$  & $-27.70$  \\
+100  & 5000 & $3.22\times10^{-2}$  & $-14.92$  \\
+500  & 1000 & $1.81\times10^{-4}$  & $-37.42$  \\
+500  & 2000 & $3.67\times10^{-2}$  & $-14.36$  \\
+500  & 3000 & $4.63\times10^{-2}$  & $-13.34$  \\
+500  & 5000 & $2.48\times10^{-2}$  & $-16.06$  \\
+1000 & 1000 & ${\sim}0$            & $-349.93$ \\
+1000 & 3000 & $1.42\times10^{-9}$  & $-88.48$  \\
+1000 & 5000 & $4.15\times10^{-5}$  & $-43.82$  \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Key observations.}
+\begin{itemize}
+  \item Coupling is extremely sensitive to geometry.  At
+    $(z, x_c) = (100,\,1000)\;\si{\micro\metre}$, the coupling is
+    $-183$\;\si{\decibel m} (essentially zero), because the detector
+    subtends angles far into the Gaussian tail.
+  \item Best coupling (${\sim}-13$\;\si{\decibel m}, about 4.6\%) is
+    achieved around $(z, x_c) = (500,\,3000)\;\si{\micro\metre}$,
+    where the detector falls near the $1/e^2$ edge of the beam.
+  \item At large $z$ (e.g.\ \SI{1000}{\micro\metre}), coupling drops
+    dramatically because the required propagation angle pushes deep into
+    the Gaussian tail.
+  \item Even in the best case, coupling is limited to a few percent
+    due to the combination of geometric overlap, Fresnel losses at
+    the fibre exit, and especially Fresnel losses at the near-grazing
+    detector surface.
+\end{itemize}
+
+% ----------------------------------------------------------------------
+\subsection{Assumptions and Limitations}
+% ----------------------------------------------------------------------
+
+\begin{enumerate}
+  \item \textbf{2D model.}  This analysis considers only the
+    cross-section in the $xz$-plane.  The beam also diverges in the
+    $y$-direction, which would further reduce coupling in a full 3D
+    calculation.
+
+  \item \textbf{Far-field approximation.}  The angular Gaussian profile
+    is valid in the far field.  For detectors very close to the fibre
+    tip ($z \ll $ Rayleigh range $\approx \SI{130}{\micro\metre}$ in
+    air), near-field effects would need to be considered.
+
+  \item \textbf{Flat, uncoated surfaces.}  Both the fibre end-face and
+    the detector surface are assumed to be flat and uncoated.  An
+    anti-reflection (AR) coating on the detector could significantly
+    reduce Fresnel losses and improve coupling by several~\si{\decibel}.
+
+  \item \textbf{Unpolarised light.}  The SMF-28 fibre does not maintain
+    polarisation, so an average of s- and p-polarisation Fresnel
+    coefficients is used.
+
+  \item \textbf{No absorption or scattering.}  Propagation losses in
+    the short air gap are neglected.
+
+  \item \textbf{Ideal Gaussian mode.}  The fibre output is assumed to be
+    a perfect fundamental Gaussian mode with no higher-order content.
+\end{enumerate}
+
+% ----------------------------------------------------------------------
+\subsection{Extension to 3D: Coupling at an Arbitrary Detector Position}
+% ----------------------------------------------------------------------
+
+The 2D model considers only the $xz$-plane.  In practice the detector may
+also be offset laterally (in $y$).  For a circularly symmetric Gaussian
+mode (as in SMF-28), the divergence angle $\theta_0$ is \emph{identical}
+in all transverse directions, so the angular intensity profile generalises
+to
+%
+\begin{equation}\label{eq:G3D}
+  G(\theta) = \exp\!\left(-\frac{2\,\theta^2}{\theta_0^2}\right),
+\end{equation}
+%
+where $\theta$ is now the \emph{total} angle from the fibre axis,
+regardless of azimuthal orientation.  The 2D ``V''-shaped divergence
+becomes a circular cone in 3D.
+
+\subsubsection{3D coupling integral}
+
+For a circular detector of radius $R_\text{det} = d/2$ centred at
+$(x_d,\, y_d,\, z_d)$ with its active face pointing in the $-z$
+direction (parallel to the chip plane), the coupled power fraction is:
+%
+\begin{equation}\label{eq:eta3D}
+  \eta_{3\text{D}}
+  = \frac{2}{\pi\,\theta_0^2}
+    \iint_\text{det}\!
+    G(\theta)\;\;
+    T_\text{fib}(\theta)\;\;
+    T_\text{det}(\alpha)\;\;
+    \frac{\cos\alpha}{r^2}\;
+    \dd{A},
+\end{equation}
+%
+where for each point $(x, y, z_d)$ on the detector disc:
+%
+\begin{itemize}
+  \item $r = \sqrt{x^2 + y^2 + z_d^2}$ is the distance from the fibre tip,
+  \item $\theta = \arctan\!\bigl(\sqrt{y^2 + z_d^2}\,\big/\,x\bigr)$ is the
+        angle from the fibre axis,
+  \item $\alpha = \arccos(z_d / r)$ is the angle of incidence on the
+        detector surface (the ray vs.\ the detector normal $-\hat{z}$),
+  \item $T_\text{fib}(\theta)$ and $T_\text{det}(\alpha)$ are the
+        Fresnel power transmittances (Eq.~\ref{eq:fresnel-T}) at the fibre
+        exit and detector entry respectively,
+  \item the factor $\cos\alpha / r^2$ converts the area element $\dd{A}$
+        into a solid-angle element as seen from the fibre tip.
+\end{itemize}
+%
+The prefactor $2/(\pi\theta_0^2)$ normalises the 3D Gaussian beam power
+(small-angle approximation):
+%
+\begin{equation}
+  P_\text{tot}
+  = \int_0^{2\pi}\!\!\int_0^{\pi/2}
+    G(\theta)\,\sin\theta\;\dd{\theta}\;\dd{\phi}
+  \;\approx\; \frac{\pi\,\theta_0^2}{2}\;.
+\end{equation}
+
+\paragraph{Key difference from 2D.}
+In 2D the beam spreads in one plane; in 3D it spreads into a full cone
+($2\pi$ in azimuth), so the power per unit solid angle reaching an
+off-axis detector is lower.  The angles $\theta_0$ and $2\theta_0$ are
+\emph{unchanged}; only the integrated power fractions differ.
+
+% ----------------------------------------------------------------------
+\subsection{Detector and Waveguide Placement Verification}
+\label{sec:placement}
+% ----------------------------------------------------------------------
+
+The waveguide loopback and detector must be placed outside the fibre
+emission cone to avoid stray-light interference.  The placement rule is:
+%
+\begin{enumerate}
+  \item Compute the $2\theta_0$ cone radius at the waveguide end
+        ($x = \SI{7000}{\micro\metre}$):
+        \[
+          y_\text{cone} = x \tan(2\theta_0)
+          = 7000 \times \tan(10.88^\circ)
+          \approx \SI{1345}{\micro\metre}.
+        \]
+  \item Add a safety margin of \SI{500}{\micro\metre}:
+        \[
+          y_\text{WG} = y_\text{cone} + 500
+          = \SI{1845}{\micro\metre}.
+        \]
+  \item The detector (1\,mm diameter) is centred at
+        $(x_d, y_d, z_d) = (6500,\; 1750,\; 50)\;\si{\micro\metre}$,
+        i.e.\ \SI{500}{\micro\metre} left of the waveguide end and
+        \SI{500}{\micro\metre} above the $2\theta_0$ cone edge.
+\end{enumerate}
+
+\subsubsection{Numerical verification}
+
+\begin{center}
+\begin{tabular}{@{}lccl@{}}
+\toprule
+\textbf{Scenario} & \textbf{Fraction} & \textbf{dBm} & \textbf{Note} \\
+\midrule
+Min.\ clearance $(6500,\,1750,\,50)$ & $8.1\times10^{-9}$ & $-80.9$
+  & Well outside cone \\
+Directly above fibre $(6500,\,0,\,50)$ & $4.3\times10^{-4}$ & $-33.7$
+  & On-axis, much higher \\
+2D in-plane $(x\!=\!6500,\,z\!=\!50)$ & $5.5\times10^{-10}$ & $-92.6$
+  & 2D model (no $y$ offset) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent
+At the min-clearance position, the angle from the fibre axis to the
+detector centre is $\theta \approx 15.1^\circ$, which exceeds
+$2\theta_0 = 10.9^\circ$ by a wide margin.  The Gaussian intensity at
+$15.1^\circ$ is only $2.2 \times 10^{-7}$ of the on-axis peak,
+confirming that the stray-light contribution is negligible
+($< -80\;\si{\decibel m}$).
+
+\paragraph{Conclusion.}
+Both the waveguide structures (lateral shift $y = \SI{1845}{\micro\metre}$)
+and the detector (at \SI{15.1}{\degree} off-axis) lie safely outside the
+$2\theta_0$ emission cone.  No significant fibre stray light reaches the
+detector or the waveguide etch region at this placement.
