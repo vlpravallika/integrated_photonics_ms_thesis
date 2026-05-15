@@ -11,9 +11,9 @@ Master of Science in Media Arts and Sciences · submitted **15 May 2026**
 **Thesis supervisor:** Dirk Englund — Professor of Electrical Engineering and AI + Decision-making, MIT EECS  
 **Committee:** Dirk Englund, Joseph Paradiso, Jelena Notaros  
 
-**Typeset thesis (author copy):** `C:\Users\prava\OneDrive\Desktop\Thesis.pdf` — section and figure references below refer to this document (86 pages, May 2026).
+**Committee certification page title (longer variant):** *Device Exploration for High-Efficiency On-Chip Detection in TFLN and Heterogeneous Gain Integration on Si for Scalable Integrated Photonics*  
 
-**Title variant on the committee certification page:** *Device Exploration for High-Efficiency On-Chip Detection in TFLN and Heterogeneous Gain Integration on Si for Scalable Integrated Photonics* — an extended formulation on the signature page; the **title page** uses the shorter title above.
+The **citation copy** of the thesis is the **MIT-submitted document** (Libraries / program deposit). This Git directory holds **artifacts only** (CAD interchange, notebooks, code, CSV measurements).
 
 ---
 
@@ -29,113 +29,136 @@ Taken together, the work advances reusable recipes for high-efficiency detection
 
 ---
 
-## How this repository folder ties to the thesis
+## What this repository contains
 
-The experiments behind **Chip 2** are documented in **Chapter 3 (Methods)** and **Chapter 4 (Results and Discussion)**, especially **§3.3.5** (waveguide-to-detector coupling measurements), **§4.1.2** (detector-signal contamination), **§4.1.3** (operating wavelength from the loopback wavelength sweep), and **§4.1.4** (two-dimensional free-space coupling model).
+This tree is the **working artifact bundle** for the thesis hardware chapters: **SolidWorks / STEP digital twins** for both benches, **GDSFactory** mask notebooks, **COMSOL** project locks (models may be kept locally), **Tidy3D** mode notebooks and scripts, **Chip 1** detector-linearity checks, and **Chip 2** loopback **wavelength–power CSV archives** plus Python reduction and plotting.
 
-In the thesis text, **Chip 2 carried 25 loopback structures**. The chip was cleaved along crystallographic planes, but a **fabrication step error** meant the loopback waveguides were **not aligned** with those planes. Facets were not uniformly perpendicular to propagation; some structures cleaved obliquely or did not reach the edge. **Sixteen structures** had **viable facets** for fiber coupling.
-
-To quantify how **facet parallelism** affects coupling, those sixteen structures were measured in two arrangements (**§3.3.5**):
-
-- **Configuration 1 (angled interfaces):** the fiber array stays parallel to the chip \(x\)-direction; the two facets are not parallel to each other, and each structure required **independent 3D alignment** (including angular adjustment).
-- **Configuration 2 (parallel interfaces):** the chip is rotated so **input and output facets are parallel**, while waveguides are tilted by **\(\sim 1^\circ\)** relative to the fiber array; a **single alignment** can optimize both interfaces and served as the **baseline** for the loopback transmission campaign.
-
-The wavelength campaign scanned **1480–1600 nm** (1/3 nm steps, **0 dBm** input, dwell per wavelength) across all sixteen viable loopbacks, recording detector output versus wavelength (**§4.1.3**). Peak transmission clusters near **\(\lambda \approx 1595\) nm**, which the thesis adopts as the **operating wavelength** for subsequent fiber-to-detector and contamination studies (see **Fig. 4.2** and the narrative around **Fig. 4.5**).
-
-The materials in **`Github uploads`** are the **layout, simulation, raw sweep exports, and Python/Jupyter tooling** used alongside that Chip 2 campaign—including **GDSFactory** loopback layout work related to **Fig. 3.11** (Chip 2 loopback GDS) and later layout iterations, **COMSOL** strip-waveguide modeling, and the **`sweep_*.csv`** archives plus scripts that normalize filenames and summarize spectra.
+There is **no separate folder named `transmission results`**: the **transmission sweep results** are the **`sweep_*.csv`** files (and derived **`summary_*.csv`**) under **`Chip 2 measurements/sweep 16 waveguides transmission/`**.
 
 ---
 
-## What this folder is for
+## Indexed layout (files that exist in this directory)
 
-This directory is meant to make the **Chip 2 measurement pipeline** and **related layout/simulation artifacts** **inspectable and reproducible**: regenerate plots, re-parse CSVs, or revisit mask geometry without hunting through scattered paths. It is **not** a full export of the Overleaf thesis project; the canonical narrative and figures remain in **`Thesis.pdf`** (and the official MIT deposit when available).
+### `on chip detection setup solidworks model/`
 
----
+**Project 1** mechanical **digital twin** geometry in neutral **STEP/STP** interchange (import into SolidWorks or any MCAD viewer). This is the same class of assembly the thesis documents in **§3.2.1** and **Fig. 3.4** (fiber-coupled detector bench with horizontal side-view imaging, clearance checks before 3D-printed fixtures).
 
-## Contents (by subfolder)
+| File | Role |
+|------|------|
+| `fiber array holder 15_01.STEP` | Custom **fiber-array holder** solid exported from SolidWorks (15 Jan revision in filename). |
+| `Newport-TSX-1D.stp` | Newport **TSX-1D** linear stage vendor solid. |
+| `B1818F-Step.step` | Thorlabs **B1818F** breadboard / plate geometry. |
+| `MAX313D-Step.step` | Thorlabs **MAX313D** mount solid. |
+| `TTR001-Step.step` | Thorlabs **TTR001** rotation mount solid. |
+| `GPXL1-Step.step` | Thorlabs **GPXL1** goniometric stage solid. |
+| `PR01-Step.step` | Thorlabs **PR01** cage plate solid. |
+| `HFV002-Step.step` | Thorlabs **HFV002** vertical translation stage solid. |
+| `CS165MU-Step.step` | Thorlabs **CS165MU** post / pedestal solid. |
+| `step_63744.step` | Additional interchange solid from the same export set (SolidWorks default `step_*.step` naming). |
 
-| Subfolder | Role |
-|-----------|------|
-| **`GDS/`** | **GDSFactory** notebook **`loopback chip iteration 4.ipynb`**: parameters and routing for **loopback** test structures (etch sweeps, strip cross-section, layers). Aligns with the **Chip 2 loopback layout** thread in the thesis (see **Fig. 3.11** and related discussion). |
-| **`COMSOL Sim/`** | **COMSOL Multiphysics** strip-waveguide model (working `.mph`). A **`.mph.lock`** file may appear while COMSOL has the model open; it is not part of the physics definition. |
-| **`Chip 2 measurements/`** | **Raw wavelength–power CSV sweeps** for the sixteen viable loopbacks, plus scripts to **rename** files consistently, **aggregate** maxima, and **plot** summaries. |
+### `Topchip gain integration setup digital twin/`
 
----
+| File | Role |
+|------|------|
+| `step_88206.step` | **Project 2** bench **STEP** export: silicon host with **dual edge-coupled fiber stacks** and **vertical confocal microscope** access as laid out in **§3.4.4–3.4.5** of the thesis (stamp alignment and pump delivery geometry). |
 
-## `GDS/` — layout notebook
+### `GDS/`
 
-Open **`GDS/loopback chip iteration 4.ipynb`** in Jupyter. It activates **`gdsfactory`** with the **generic PDK**, sets strip width and **127 µm** pitch, defines routing constants for tiled loopbacks, sweeps etch parameters (length, width, gap), and assigns waveguide / box layers. Run cells sequentially and export **GDS/OASIS** for your tape-out flow.
+| File | Role |
+|------|------|
+| `loopback chip iteration 4.ipynb` | **Primary** **GDSFactory** notebook (generic PDK): **0.8 µm** strip waveguide, **127 µm** facet pitch, Euler **U-turn** radius `(PITCH/2)−5.8` µm, long routing straights, **`ETCH_LENGTHS` × `ETCH_WIDTHS` × `ETCH_GAPS`** etch-window sweep, layer pair `(1,0)` waveguide / `(2,0)` box. This is the **Chip 2** loopback mask lineage behind **Fig. 3.11** in the thesis. |
+| `loopback chip iteration 3.ipynb` | **Earlier** loopback notebook (`repeats = 7`, **5000 µm** straight sections, etch lengths up to **2500 µm**, boolean / `LayerStack` tooling) retained for iteration history. |
+| `bend_radius_analysis.ipynb` | **Tidy3D**-invoking bend / propagation study notebook (see notebook for exact solver calls and warnings). Informs Euler bend radius choices in the loopback notebooks. |
 
----
+### `COMSOL Sim/`
 
-## `COMSOL Sim/` — FEM / mode work
+| File | Role |
+|------|------|
+| `strip waveguide compressed.mph.lock` | Lock file for the **strip waveguide** COMSOL model (`strip waveguide compressed.mph` when saved locally). |
+| `taper waveguide edge.mph.lock` | Lock file for the **taper / facet-edge** waveguide model (`taper waveguide edge.mph` when saved locally). |
 
-Use the **`.mph`** model in COMSOL matching your installed version. This supports mode or propagation assumptions used to interpret coupling alongside measurements.
+Only **`.mph.lock`** files are present in this snapshot; the binary **`.mph`** models are usually excluded from Git for size. Re-open the corresponding `.mph` in COMSOL on a machine that has the full file.
 
-**Version control tip:** add `*.mph.lock` to `.gitignore` if you track the project in Git.
+### `Mode simulations/`
 
----
+Eigenmode and overlap work for the **LNOI rib** cross section at **1550 nm** scale (thesis **Fig. 3.2** class: Tidy3D FDE rib mode).
 
-## `Chip 2 measurements/` — data and scripts
+| Path | Role |
+|------|------|
+| `ln_rib_mode_overlap.ipynb` | Notebook pipeline for **rib eigenmodes** and **overlap integrals** with a cleaved **SMF-28** Gaussian (**MFD = 10.4 µm**). |
+| `edge_coupler.ipynb` | Notebook for **edge-coupler** field / coupling studies. |
+| `rib waveguide modes.py` | Standalone **Tidy3D** `ModeSolver` script: **10 µm** SiO₂ underclad, **0.30 µm** LN film, **0.10 µm** slab, **0.20 µm** rib height, **0.80 µm** rib top width, **5.6 µm** bottom width; computes mode fields and **power overlap** with fiber mode. |
+| `.vscode/settings.json` | Workspace editor settings used while developing these notebooks. |
+| `build/log/.wsport.log` | Tool-generated log from a local solve / IDE session. |
 
-### `sweep 16 waveguides transmission/`
+### `Chip 1/`
 
-Contains many **`sweep_*.csv`** files from the wavelength sweeps. After cleanup, filenames follow:
+| File | Role |
+|------|------|
+| `characterisation of detector comparison.py` | **Capped vs. uncapped** photoreceiver comparison: hard-coded **`power_dbm_*`** vs **`voltage_v_*`** arrays, plots **dBm** and **µW** vs voltage and inferred **photocurrent**; writes **`compare_dBm_vs_voltage.png`**, **`compare_uW_vs_voltage.png`**, **`compare_current_vs_voltage.png`** in the current working directory when run. Supports the **TIA / saturation** discussion around **Fig. 3.14** bench checkout. |
 
-- **Angled-interface / Configuration 1–style naming:** `sweep_<N>_<YYYYMMDD>_<HHMMSS>.csv`
-- **Parallel-interface / Configuration 2–style naming:** `sweep_<N>_p_<YYYYMMDD>_<HHMMSS>.csv` (the **`p_`** token marks the “parallel facets” campaign in the local naming scheme)
+### `Chip 2 measurements/`
 
-The script **`transmission_calculation.py`** combines:
+**Thesis linkage:** **§3.3.5** (measurement protocol), **§4.1.2–4.1.4** (contamination, operating wavelength, 2D free-space model). **Chip 2** has **25** designed loopbacks; **16** cleaved to viable facets (**§3.3.5** text). **Configuration 1** = angled facets; **Configuration 2** = parallel facets (**§3.3.5**). Sweeps run **1480–1600 nm**, **0 dBm** input; **~1595 nm** adopted as common operating point (**§4.1.3**, **Fig. 4.2**).
 
-1. A **regex rename** utility that normalizes legacy sweep filenames without silent overwrites.
-2. An **analysis** block that keeps structures **`{3, 7, 8, 9, 10}`** (a subset emphasized in local summaries), reads **`wavelength_nm`** and **`power_dBm`**, takes the **maximum** per file, collapses duplicate runs, and writes **`summary_selected.csv`** plus **`wavelength_vs_structure_selected.png`**.
+| Path | Role |
+|------|------|
+| `sweep 16 waveguides transmission/sweep_*.csv` | Raw **wavelength sweep** logs: columns include **`wavelength_nm`** and **`power_dBm`** (after instrument export). Filename grammar after cleanup: `sweep_<structure>_<YYYYMMDD>_<HHMMSS>.csv` for **Configuration 1** runs and `sweep_<structure>_p_<YYYYMMDD>_<HHMMSS>.csv` when `_p_` marks **Configuration 2** (“parallel facets”) reruns. |
+| `sweep 16 waveguides transmission/summary_selected.csv` | Per-structure, per-orientation **max power** table produced by **`transmission_calculation.py`**. |
+| `sweep 16 waveguides transmission/summary_maxima_selected.csv` | Alternate / intermediate maxima summary from the same script family. |
+| `sweep 16 waveguides transmission/summary_maxima.csv` | Broader maxima table prior to orientation filtering (same analysis lineage). |
+| `sweep 16 waveguides transmission/transmission_calculation.py` | **(1)** Regex-based batch **rename** of `sweep_*.csv` to the canonical patterns above (collision-safe). **(2)** **pandas**/**numpy** pass: filters structures **`{3,7,8,9,10}`**, finds **argmax** of `power_dBm`, deduplicates by structure+orientation, writes **`summary_selected.csv`** and **`wavelength_vs_structure_selected.png`**. |
+| `transmission variation in fiber x.py` | Standalone **matplotlib** plots of **detector voltage vs. fiber \(x\)** (µm) from embedded arrays: raw trace, min–max scaled, and **20·log₁₀(V/Vmax)** dB scale—used for **lateral alignment** sweeps in the same measurement campaign as **§4.1.4**. |
+| `Plots/Transmisison values for all 16 loopbacks comparison.py` | **Agg** backend: plots **all 16** structures’ **dBm** values at **1595 nm**, **0 dBm** input for **Case 1** vs **Case 2** arrays (same physical content as **Configuration 1** vs **2** in the thesis), highlights structures **3,7,8,9,10**, draws **−28 dBm** and **−65 dBm** reference lines. **You must edit `out_path`** inside the script before saving figures on a new machine. |
 
-> **Dependencies:** **`pandas`**, **`numpy`**, **`matplotlib`** for the analysis section (the rename block uses only the standard library plus **`pathlib`**).
+### `README.md`
 
-**Terminology:** the thesis uses **Configuration 1** and **Configuration 2**; some Python files use the shorthand **Case 1 / Case 2** for the same two arrangements.
-
-### `transmission variation in fiber x.py`
-
-Plots **detector output vs. fiber alignment in \(x\)** (microns)—raw voltage, min–max scaling, and **relative dB**—supporting the **lateral fiber-to-detector** scans discussed with the **2D free-space model** in **§4.1.4** and **Appendix A.1**.
-
-### `Plots/Transmisison values for all 16 loopbacks comparison.py`
-
-*(Filename keeps the original spelling “Transmisison”.)*
-
-Builds a **compact comparison figure** of **transmission vs. structure index** for all sixteen loopbacks for both configurations, with reference lines at **−28 dBm** (illustrative two-edge **−14 dB** budget) and **−65 dBm** (a local “acceptable band” threshold used in plotting). **Update figure captions** to match the **final thesis wording** if your published figures differ.
-
-The script’s **`out_path`** is currently an **absolute path** on the author machine; change it when you clone or move the repo.
-
----
-
-## Reproducing results (suggested order)
-
-1. Install **Python 3.10+**, then `pip install numpy matplotlib pandas jupyter gdsfactory` (and **COMSOL** locally for FEM).
-2. Run **`GDS/loopback chip iteration 4.ipynb`**.
-3. In **`Chip 2 measurements/sweep 16 waveguides transmission/`**, run **`transmission_calculation.py`** (rename pass first if you are ingesting new sweeps with legacy names, then analysis).
-4. Run **`Plots/Transmisison values for all 16 loopbacks comparison.py`** after fixing **`out_path`**.
-5. Open the **`.mph`** model in **`COMSOL Sim/`** as needed.
-
----
-
-## Related LaTeX on disk (draft / auxiliary)
-
-`MIT/QP/Inspired/Chip 2 measurements/Plots/loopback_transmission_thesis.tex` contains a **self-contained LaTeX fragment** (table + figure stub) for loopback transmission. Treat it as **drafting material** unless the same numbers and captions appear verbatim in **`Thesis.pdf`**.
-
----
-
-## Citing this work
-
-For formal citation, use the **MIT thesis record** (Libraries / program deposit) once assigned. Until then, you may reference the **author-held PDF**: `C:\Users\prava\OneDrive\Desktop\Thesis.pdf`. For **datasets and code**, link to this **`Github uploads`** directory in addition to the thesis.
+This file.
 
 ---
 
-## License and credit
+## How measurements map to thesis language
 
-Thesis text and figures: © **2026** Vemparala Lakshmi Pravallika (subject to MIT thesis deposit terms). Third-party tools (**GDSFactory**, **COMSOL**, Python stack) remain under their respective licenses.
+- **Thesis:** **Configuration 1** (angled interfaces) vs **Configuration 2** (parallel interfaces).  
+- **Python in this repo:** often labeled **Case 1** / **Case 2** in comments and plot legends.
+
+---
+
+## Dependencies (by component)
+
+| Component | Typical stack |
+|-----------|----------------|
+| `GDS/*.ipynb` | **Python 3.10+**, **`gdsfactory`**, Jupyter |
+| `Mode simulations/*` | **`tidy3d`**, **`numpy`**, **`matplotlib`**, Jupyter |
+| `COMSOL Sim` | **COMSOL Multiphysics** (version matched to your `.mph`) |
+| `Chip 2 measurements/*.py` | **`numpy`**, **`matplotlib`**; **`transmission_calculation.py`** analysis cell needs **`pandas`** |
+| CAD | Any STEP/STP-capable viewer (SolidWorks, Onshape, FreeCAD) |
+
+---
+
+## Suggested reproduction order
+
+1. Open STEP files in **`on chip detection setup solidworks model/`** and **`Topchip gain integration setup digital twin/`** to recover full 3D clearance context (**Fig. 3.4** and Project 2 bench figures).  
+2. Run **`GDS/loopback chip iteration 4.ipynb`**, then compare against **`loopback chip iteration 3.ipynb`** for design deltas.  
+3. Run **`bend_radius_analysis.ipynb`** if updating bend radii before a mask rerun.  
+4. Execute **`Mode simulations/rib waveguide modes.py`** or the notebooks after configuring **Tidy3D** credentials.  
+5. Open COMSOL **`.mph`** files that pair with the two **`.mph.lock`** names (local machine).  
+6. From **`Chip 2 measurements/sweep 16 waveguides transmission/`**, run **`transmission_calculation.py`** (rename pass only when ingesting new raw sweeps), then run the **`Plots/`** script after fixing paths.
+
+---
+
+## Version control hygiene (recommended)
+
+Add to **`.gitignore`** if you expand commits: `*.mph.lock`, `**/.vscode/`, `**/build/`, large `*.mph`, and any regenerated **`compare_*.png`** / **`transmission_vs_structure.png`** outputs if you do not want binaries in history.
+
+---
+
+## License
+
+Thesis text and figures: © **2026** Vemparala Lakshmi Pravallika (subject to MIT thesis deposit terms). **Vendor STEP** models remain property of their respective suppliers. **Tidy3D**, **COMSOL**, **gdsfactory**, and Python packages follow their own licenses.
 
 ---
 
 ## Contact
 
-Use the correspondence channels given in the submitted thesis (`Thesis.pdf`).
+Use the correspondence channels listed in the submitted thesis front matter.
