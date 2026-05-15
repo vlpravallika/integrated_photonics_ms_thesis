@@ -1,0 +1,11 @@
+structure,orientation,wavelength_nm_max,power_dBm_max,file
+3,angled,1597.0,-52.4336,sweep_3_20260204_165126.csv
+7,angled,1579.0,-58.7056,sweep_7_20260204_161059.csv
+8,angled,1546.0,-54.5752,sweep_8_20260204_160416.csv
+9,angled,1600.0,-54.2783,sweep_9_20260204_175441.csv
+10,angled,1597.0,-56.0573,sweep_10_20260204_175906.csv
+3,parallel,1597.0,-49.8428,sweep_3_p_20260204_192853.csv
+7,parallel,1594.0,-65.8058,sweep_7_p_20260204_195758.csv
+8,parallel,1558.0,-49.6031,sweep_8_p_20260205_104129.csv
+9,parallel,1561.0,-51.1817,sweep_9_p_20260205_104424.csv
+10,parallel,1600.0,-53.7408,sweep_10_p_20260205_105504.csv
